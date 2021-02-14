@@ -42,7 +42,7 @@ void Game::CheckKeyboard() {// come to here if keyboard pressed
 void Game::KeyboardDown(Event event, bool keyboard) {//come to here when keyboard button down or joystick moved;
 	auto keyID = event.text.unicode;
 	Keyboard::Key a = event.key.code;
-	
+
 	auto joystick = event.joystickMove.axis;
 	auto pt = event.joystickMove.position;
 	auto player = event.joystickMove.joystickId;
@@ -130,7 +130,7 @@ void Game::KeyboardReleased(Event event) {// come to here if keyboard realeased
 }
 
 
-void Game::checkBullets() {// traverse bullet list, check bullets' position, if out of screen then delete it. 
+void Game::checkBullets() {// traverse bullet list, check bullets' position, if out of screen then delete it.
 	for (unsigned int i = 0; i < bulletList.size(); i++) {
 		BPoint bulletPeak = bulletList[i]->getPeekPoint();
 		if (bulletPeak.x > 1000 || bulletPeak.y >= 1000 || bulletPeak.x <= 0 || bulletPeak.y <= 0) {
@@ -263,7 +263,7 @@ Game::Game() {
 	playerTank = new Tank(BPoint(450, 900), direction::top, BSize(50, 50), Color(100, 255, 100, 255));//init player Tank color:r,g,b,a
 	player2Tank = new Tank(BPoint(100, 100), direction::bot, BSize(50, 50), Color(255, 100, 100, 255));
 	flyThread = new std::thread(&Game::FLY, this);// init fly thread
-	
+
 	//Bonus aBonus = Bonus();
 
 
@@ -275,7 +275,7 @@ Game::Game() {
 
 	for (int i = 0; i < 8; i++) {
 		std::stringstream os;
-		os << "images\\" << strExplosion[i];
+		os << "images/" << strExplosion[i];
 		strExplosion[i] = os.str();
 	}
 	for (int i = 0; i < 8; i++) {
@@ -287,9 +287,9 @@ Game::Game() {
 		boomTextures.push_back(tmp);
 	}
 	MyFont = new Font();
-	if (!MyFont->loadFromFile("fonts\\font2.ttf"))
+	if (!MyFont->loadFromFile("fonts/font2.ttf"))
 	{
-		std::cerr << "Could not load font " << "fonts\\font2.ttf" << std::endl;
+		std::cerr << "Could not load font " << "fonts/font2.ttf" << std::endl;
 		std::exit(1);
 	}
 
@@ -343,7 +343,7 @@ void Game::play() { // call this function to start playing
 	}
 }
 
-void Game::playBoom() {//paint gif 
+void Game::playBoom() {//paint gif
 	for (int i = 0; i < 8; i++) {
 		deadTank->getSpTank()->BSetTexture(*boomTextures[i]);
 		sleep(milliseconds(150));

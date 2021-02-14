@@ -31,7 +31,7 @@ class Game
 	bool boomPlayed;
 	std::string strExplosion[8] = { "Explosion_A.png","Explosion_B.png" ,
 		"Explosion_C.png" ,"Explosion_D.png" ,"Explosion_E.png" ,"Explosion_F.png" ,"Explosion_G.png" ,"Explosion_H.png" };
-	std::string PtsFileName="binFile\\Pts.bin";
+	std::string PtsFileName="binFile/Pts.bin";
 	std::vector<BPoint>pts;
 	std::vector<Texture*>boomTextures ;
 	RectangleShape dashBoard = RectangleShape(Vector2f(100, 1000));
@@ -39,18 +39,17 @@ class Game
 	int stickConnected = 0;
 	Clock clock;// will be using for Counting game time and generate random event
 	void CheckKeyboard();
-	void KeyboardDown(Event event, bool keyboard = true); 
+	void KeyboardDown(Event event, bool keyboard = true);
 	void KeyboardReleased(Event event);
 	void checkBullets();
 	void FLY();
-	void update(); 
+	void update();
 	void checkTanks();
 	void playBoom();
-	
+
 public:
 	std::vector<Bullet*>bulletList;
-	Game(); 
+	Game();
 	~Game();
 	void play();
 };
-
