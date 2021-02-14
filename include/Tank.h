@@ -1,6 +1,6 @@
 #pragma once
 #include<SFML/System.hpp>
-#include"SFML\Graphics.hpp"
+#include<SFML/Graphics.hpp>
 #include<string>
 #include "BGraphic.h"
 #include"Bullet.h"
@@ -16,7 +16,7 @@ class Tank {
 	BSprite*spTank;
 	BSize tankSize;
 	direction tankFace = top;
-	int nHp = 100; 
+	int nHp = 100;
 	int nDamage;
 	int nSpeed;
 	BLine trajectory;
@@ -24,11 +24,11 @@ class Tank {
 	Clock aClock;
 	Texture fireTexture;
 	BPoint ptMouth = BPoint(0, 0);
-	std::string tankPath = "images\\Ntank1.png";
-	std::string damageSoundPath = "sounds\\attacked.wav";
-	std::string fireSoundPath = "sounds\\fire.wav";
-	std::string moveSoundPath = "sounds\\moving.wav";
-	std::string explSoundPath = "sounds\\Explosion.wav";
+	std::string tankPath = "images/Ntank1.png";
+	std::string damageSoundPath = "sounds/attacked.wav";
+	std::string fireSoundPath = "sounds/fire.wav";
+	std::string moveSoundPath = "sounds/moving.wav";
+	std::string explSoundPath = "sounds/Explosion.wav";
 	bool gameOver = false;
 	bool MvThreadEnd = false;
 	BSound * sdExplosion = nullptr;
@@ -61,7 +61,3 @@ public:
 	void stop();
 	~Tank();
 };
-
-
-
-

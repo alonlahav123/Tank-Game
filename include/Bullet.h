@@ -9,7 +9,7 @@ public:
 	direction dirFly;
 	Texture aTexture;
 	int nDamage = 30;
-	const std::string bulletPath = "images\\bullet.png";
+	const std::string bulletPath = "images/bullet.png";
 
 	Bullet(BPoint startPoint, direction dic) {
 		if (!aTexture.loadFromFile(bulletPath)) {

@@ -1,5 +1,5 @@
 #pragma once
-#include "SFML\Graphics.hpp"
+#include <SFML/Graphics.hpp>
 #include<vector>
 #include <SFML/Audio.hpp>
 #include<string>
@@ -20,7 +20,7 @@ public:
 		width = w;
 		height = h;
 	}
-	
+
 
 };
 
@@ -87,7 +87,7 @@ class BSprite :public Sprite {
 	direction dic;//current direction
 	Texture*BTexture;// texture
 public:
-	
+
 	Texture* getBTexture() {
 		return BTexture;
 	}
@@ -95,16 +95,16 @@ public:
 	BSprite() = default;
 	//construct a sprite with given texture, size, direction, center point
 	BSprite(Texture texture, BSize size, direction textureDic, BPoint ptCenterStart) :Sprite(texture) {
-		
+
 		spSize = size;
 		BSetTexture(texture);
 		setPosition(ptCenterStart.x, ptCenterStart.y);
 		move(-size.width / 2, -size.height / 2);
 		dic = textureDic;
-		
+
 		BTexture = new Texture(texture);
 	}
-	
+
 	void BSetTexture(Texture texture) {
 		setTexture(texture);
 		float widthScale = (static_cast<float>(spSize.width) / texture.getSize().x);
@@ -112,7 +112,7 @@ public:
 		BTexture = new Texture(texture);
 		setScale(widthScale, heightScale);
 	}
-	
+
 	BPoint getPeakPoint() {// grabe vector graph's peak point ex: tank's muzzle, Bullet's warhead
 		int x = int(getPosition().x);
 		int y = int(getPosition().y);
@@ -122,7 +122,7 @@ public:
  			return BPoint(x + spSize.width / 2 - 2, y);
 		else if (dic == 3)
 			return BPoint(x, y - spSize.height / 2 + 2);
-		else 
+		else
 			return BPoint(x, y + spSize.height / 2 - 2);
 	}
 
@@ -131,7 +131,7 @@ public:
 	}
 	//rotate around center point; take the new direction, compare with old direction and determine how many degree need rotate
 	void BRotate(direction newDic) {// rotating around the center position
-		
+
 		if (dic == newDic) {
 			dic = newDic;
 			return;
@@ -177,7 +177,7 @@ public:
 		}
 		dic = newDic;
 	}
-	
+
 	void move(int x, int y){//override move function
 		Sprite::move(float(x), float(y));
 	}
@@ -187,4 +187,3 @@ public:
 		delete BTexture;
 	}
 };
-
