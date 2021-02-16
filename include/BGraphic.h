@@ -21,7 +21,6 @@ public:
 		height = h;
 	}
 
-
 };
 
 class BSound: public Sound{

@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "../include/Game.h"
 
 using namespace sf;
 using namespace std;
@@ -142,12 +142,14 @@ void Game::checkBullets() {// traverse bullet list, check bullets' position, if 
 			Bullet * tmp = bulletList[i];
 			bulletList.erase(bulletList.begin() + i);
 			playerTank->damaged(tmp->nDamage);
+			player2Tank->addScore(10);
 			delete tmp;
 		}
 		if (player2Tank->isContainItems(bulletPeak)) {
 			Bullet * tmp = bulletList[i];
 			bulletList.erase(bulletList.begin() + i);
 			player2Tank->damaged(tmp->nDamage);
+			playerTank->addScore(10);
 			delete tmp;
 		}
 
@@ -173,60 +175,6 @@ void Game::FLY() {// thread function, move bullets
 	flyThreadEnd = true;
 }
 
-void Game::checkCoins() { //check for intersection with coin
-  for (unsigned int i; i < coinVec.size(); i++) {
-    if (playerTank->isCollidingWithCoin(coinVec[i])) {
-      playerTank->addScore(10);
-      coinVec[i]->setPos({12500,12500}); //TEMP "DELETE"
-    }
-    if (player2Tank->isCollidingWithCoin(coinVec[i])) {
-      player2Tank->addScore(10);
-      coinVec[i]->setPos({12500,12500}); //TEMP "DELETE"
-    }
-  }
-}
-
-void Game::update() {// re-painting game board with new dates.
-
-        gameWindow->clear();
-	playerTank->getSpTank()->setTexture(*playerTank->getSpTank()->getBTexture());
-	gameWindow->draw(*dynamic_cast<Sprite*>(playerTank->getSpTank()));// draw tank
-	player2Tank->getSpTank()->setTexture(*player2Tank->getSpTank()->getBTexture());
-	gameWindow->draw(*dynamic_cast<Sprite*>(player2Tank->getSpTank()));// draw tank
-
-	//gameMap.paint(gameWindow);
-
-	for (unsigned int i = 0; i < bulletList.size(); i++) {// draw bullets one by one
-		Bullet*aBullet = bulletList[i];
-		aBullet->spBullet->setTexture(*aBullet->spBullet->getBTexture());
-		gameWindow->draw(*dynamic_cast<Sprite*>(aBullet->spBullet));
-	}
-
-	if (gameOver) {// if game end, draw text
-		gameOverText.setFont(*MyFont);
-		gameWindow->draw(gameOverText);
-	}
-	//painting two tank's front line(three points):
-	for (unsigned int i = 0; i < playerTank->getFrontPoints().size(); i++) {
-		sf::Vertex point(playerTank->getFrontPoints()[i].getV2f(), sf::Color::Yellow);
-		gameWindow->draw(&point, 5, sf::Points);
-	}
-	for (unsigned int i = 0; i < player2Tank->getFrontPoints().size(); i++) {
-		sf::Vertex point(player2Tank->getFrontPoints()[i].getV2f(), sf::Color::Yellow);
-		gameWindow->draw(&point, 5, sf::Points);
-	}
-
-	gameWindow->draw(dashBoard);
-	tank1Hp.setFont(*MyFont);
-	tank2Hp.setFont(*MyFont);
-	gameWindow->draw(tank1Hp);
-	gameWindow->draw(tank2Hp);
-	//score stuff
-	for (unsigned int i = 0; i < coinVec.size(); i++) {
-	  coinVec[i]->drawTo(*gameWindow);
-	}	
-	gameWindow->display();
-}
 
 
 void Game::checkTanks() {// check tank for collision or running out of screen;
@@ -273,6 +221,36 @@ void Game::checkTanks() {// check tank for collision or running out of screen;
 	str2Hp << hp << player2Tank->getHp();
 	tank1Hp.setString(str1HP.str());
 	tank2Hp.setString(str2Hp.str());
+	
+
+}
+
+void Game::checkCoins() { //check for intersection with coin
+  //score counter sstreams
+  std::ostringstream ssScoreP1, ssScoreP2;
+  ssScoreP1.str(""); //refresh score label
+  ssScoreP2.str("");
+  ssScoreP1 << " Score: " << playerTank->getScore();
+  ssScoreP2 << " Score: " << player2Tank->getScore();
+  lblP1Score.setString(ssScoreP1.str());
+  lblP2Score.setString(ssScoreP2.str());
+  
+  for (unsigned int i = 0; i < coinVec.size(); i++) {
+    if (playerTank->isCollidingWithCoin(coinVec[i])) {
+      coinVec[i]->setPos({12500,12500}); //TEMP "DELETE"
+      playerTank->addScore(10);
+      ssScoreP1.str("");
+      ssScoreP1 << " Score: " << playerTank->getScore();
+      lblP1Score.setString(ssScoreP1.str());
+    }
+    if (player2Tank->isCollidingWithCoin(coinVec[i])) {
+      coinVec[i]->setPos({12500,12500}); //TEMP "DELETE"
+      player2Tank->addScore(10);
+      ssScoreP2.str("");
+      ssScoreP2 << " Score: " << player2Tank->getScore();
+      lblP2Score.setString(ssScoreP2.str());
+    }
+  }
 }
 
 Game::Game() {
@@ -281,15 +259,45 @@ Game::Game() {
 	player2Tank = new Tank(BPoint(100, 100), direction::bot, BSize(50, 50), Color(255, 100, 100, 255));
 	flyThread = new std::thread(&Game::FLY, this);// init fly thread
 
-	//score stuff
+	//coin stuff
 	Coin* coin1 = new Coin({15,15});
 	Coin* coin2 = new Coin({15,15});
+	Coin* coin3 = new Coin({15,15});
+	Coin* coin4 = new Coin({15,15});
+	Coin* coin5 = new Coin({15,15});
+	Coin* coin6 = new Coin({15,15});
+	Coin* coin7 = new Coin({15,15});
+	Coin* coin8 = new Coin({15,15});
+	Coin* coin9 = new Coin({15,15});
 	coinVec.push_back(coin1);
 	coinVec.push_back(coin2);
-	coin1->setPos({450, 125});
-	coin2->setPos({800, 300});
-		      
+	coinVec.push_back(coin3);
+	coinVec.push_back(coin4);
+	coinVec.push_back(coin5);
+	coinVec.push_back(coin6);
+	coinVec.push_back(coin7);
+	coinVec.push_back(coin8);
+	coinVec.push_back(coin9);
+	coinVec[0]->setPos({250,150});
+	coinVec[1]->setPos({250,400});
+	coinVec[2]->setPos({250,650});
+	coinVec[3]->setPos({500,150});
+	coinVec[4]->setPos({500,400});
+	coinVec[5]->setPos({500,650});
+	coinVec[6]->setPos({750,150});
+	coinVec[7]->setPos({750,400});
+	coinVec[8]->setPos({750,650});
 
+	//score counter stuff
+	lblP1Score.setCharacterSize(20);
+	lblP2Score.setCharacterSize(20);
+	lblP1Score.setPosition({1000, 20});
+	lblP2Score.setPosition({1000, 70});
+	lblP1Score.setStyle(sf::Text::Bold);
+	lblP2Score.setStyle(sf::Text::Bold);
+	lblP1Score.setFillColor(Color::Green);
+	lblP2Score.setFillColor(Color::Red);
+	
 	//Bonus aBonus = Bonus();
 
 
@@ -335,6 +343,54 @@ Game::Game() {
 	gameOverText.setCharacterSize(30); // in pixels, not points!
 	gameOverText.setStyle(sf::Text::Bold);
 	gameOverText.setPosition(500, 500);
+}
+
+void Game::update() {// re-painting game board with new dates.
+
+        gameWindow->clear();
+	playerTank->getSpTank()->setTexture(*playerTank->getSpTank()->getBTexture());
+	gameWindow->draw(*dynamic_cast<Sprite*>(playerTank->getSpTank()));// draw tank
+	player2Tank->getSpTank()->setTexture(*player2Tank->getSpTank()->getBTexture());
+	gameWindow->draw(*dynamic_cast<Sprite*>(player2Tank->getSpTank()));// draw tank
+
+	//gameMap.paint(gameWindow);
+
+	for (unsigned int i = 0; i < bulletList.size(); i++) {// draw bullets one by one
+		Bullet*aBullet = bulletList[i];
+		aBullet->spBullet->setTexture(*aBullet->spBullet->getBTexture());
+		gameWindow->draw(*dynamic_cast<Sprite*>(aBullet->spBullet));
+	}
+
+	if (gameOver) {// if game end, draw text
+		gameOverText.setFont(*MyFont);
+		gameWindow->draw(gameOverText);
+	}
+	//painting two tank's front line(three points):
+	for (unsigned int i = 0; i < playerTank->getFrontPoints().size(); i++) {
+		sf::Vertex point(playerTank->getFrontPoints()[i].getV2f(), sf::Color::Yellow);
+		gameWindow->draw(&point, 5, sf::Points);
+	}
+	for (unsigned int i = 0; i < player2Tank->getFrontPoints().size(); i++) {
+		sf::Vertex point(player2Tank->getFrontPoints()[i].getV2f(), sf::Color::Yellow);
+		gameWindow->draw(&point, 5, sf::Points);
+	}
+
+	gameWindow->draw(dashBoard);
+	tank1Hp.setFont(*MyFont);
+	tank2Hp.setFont(*MyFont);
+	gameWindow->draw(tank1Hp);
+	gameWindow->draw(tank2Hp);
+	//coin draw
+	for (unsigned int i = 0; i < coinVec.size(); i++) {
+	  coinVec[i]->drawTo(*gameWindow);
+	}
+	//score counter draw
+	lblP1Score.setFont(*MyFont);
+	lblP2Score.setFont(*MyFont);
+	gameWindow->draw(lblP1Score);
+	gameWindow->draw(lblP2Score);
+       
+	gameWindow->display();
 }
 
 void Game::play() { // call this function to start playing
@@ -389,6 +445,9 @@ Game::~Game() {
 		delete playerTank;
 	for (unsigned int i = 0; i < bulletList.size(); i++) {
 		delete bulletList[i];
+	}
+	for (unsigned int i = 0; i < coinVec.size(); i++) {
+		delete coinVec[i];
 	}
 	for (unsigned int i = 0; i < boomTextures.size(); i++) {
 		delete boomTextures[i];

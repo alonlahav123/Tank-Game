@@ -1,6 +1,6 @@
-#include "Tank.h"
-#include "Bullet.h"
-#include "Coin.h"
+#include "../include/Tank.h"
+#include "../include/Bullet.h"
+#include "../include/Coin.h"
 
 void Tank::setGameOver() {
 	gameOver = true;
@@ -10,9 +10,12 @@ void Tank::setGameOver() {
 }
 
 
-
 Tank::Tank(BPoint pt, direction dc, BSize size, Color aColor) {
 	tankSize = size;
+	tankBox.setSize({(float)size.height,(float)size.width});
+	tankBox.setPosition(pt.getV2f());
+	tankBox.move(-size.width / 2, -size.height / 2);
+
 	if (!aTexture.loadFromFile(tankPath)) {
 		std::cerr << "Can't load texture: " << tankPath << std::endl;
 		std::exit(1);
@@ -92,15 +95,22 @@ void Tank::MOVE() {// moving thread function
 	while (gameOver == false) {
 		sleep(milliseconds(10));//speed is 1 pixel per 10 millisecond
 		if (isMoving) {
-			if (tankFace == 1)
-				spTank->move(1, 0);
-			else if (tankFace == 3)
-				spTank->move(-1, 0);
-			else if (tankFace == top)
-				spTank->move(0, -1);
-			else if (tankFace == bot) {
-				spTank->move(0, 1);
-			}
+		  if (tankFace == 1) {
+		    spTank->move(1, 0);
+		    tankBox.move(1, 0);
+		  }
+		  else if (tankFace == 3) {
+		      spTank->move(-1, 0);
+		      tankBox.move(-1, 0);
+		  }
+		  else if (tankFace == top) {
+		    spTank->move(0, -1);
+		    tankBox.move(0, -1);
+		  }
+		  else if (tankFace == bot) {
+		    spTank->move(0, 1);
+		    tankBox.move(0, 1);
+		  }
 		}
 	}
 	MvThreadEnd = true;
@@ -130,12 +140,8 @@ void Tank::addScore(unsigned int newPts) {
         score += newPts;
 }
 
-sf::FloatRect Tank::getGlobalBounds() {
-  return this->getGlobalBounds();
-}
-
 bool Tank::isCollidingWithCoin(Coin* c) {
-  if (this->getGlobalBounds().intersects(c->getGlobalBounds())) {
+  if (tankBox.getGlobalBounds().intersects(c->getGlobalBounds())) {
       return true;
     }
     return false;
