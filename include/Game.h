@@ -4,6 +4,7 @@
 #include"Tank.h"
 #include<thread>
 #include"Bullet.h"
+#include"Coin.h"
 #include<sstream>
 #include<iostream>
 #include <SFML/Audio.hpp>
@@ -42,6 +43,7 @@ class Game
 	void KeyboardDown(Event event, bool keyboard = true);
 	void KeyboardReleased(Event event);
 	void checkBullets();
+        void checkCoins();
 	void FLY();
 	void update();
 	void checkTanks();
@@ -49,6 +51,7 @@ class Game
 
 public:
 	std::vector<Bullet*>bulletList;
+        std::vector<Coin*> coinVec;
 	Game();
 	~Game();
 	void play();

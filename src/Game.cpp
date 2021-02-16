@@ -173,14 +173,27 @@ void Game::FLY() {// thread function, move bullets
 	flyThreadEnd = true;
 }
 
+void Game::checkCoins() { //check for intersection with coin
+  for (unsigned int i; i < coinVec.size(); i++) {
+    if (playerTank->isCollidingWithCoin(coinVec[i])) {
+      playerTank->addScore(10);
+      coinVec[i]->setPos({12500,12500}); //TEMP "DELETE"
+    }
+    if (player2Tank->isCollidingWithCoin(coinVec[i])) {
+      player2Tank->addScore(10);
+      coinVec[i]->setPos({12500,12500}); //TEMP "DELETE"
+    }
+  }
+}
 
 void Game::update() {// re-painting game board with new dates.
 
-	gameWindow->clear();
+        gameWindow->clear();
 	playerTank->getSpTank()->setTexture(*playerTank->getSpTank()->getBTexture());
 	gameWindow->draw(*dynamic_cast<Sprite*>(playerTank->getSpTank()));// draw tank
 	player2Tank->getSpTank()->setTexture(*player2Tank->getSpTank()->getBTexture());
 	gameWindow->draw(*dynamic_cast<Sprite*>(player2Tank->getSpTank()));// draw tank
+
 	//gameMap.paint(gameWindow);
 
 	for (unsigned int i = 0; i < bulletList.size(); i++) {// draw bullets one by one
@@ -208,6 +221,10 @@ void Game::update() {// re-painting game board with new dates.
 	tank2Hp.setFont(*MyFont);
 	gameWindow->draw(tank1Hp);
 	gameWindow->draw(tank2Hp);
+	//score stuff
+	for (unsigned int i = 0; i < coinVec.size(); i++) {
+	  coinVec[i]->drawTo(*gameWindow);
+	}	
 	gameWindow->display();
 }
 
@@ -264,6 +281,15 @@ Game::Game() {
 	player2Tank = new Tank(BPoint(100, 100), direction::bot, BSize(50, 50), Color(255, 100, 100, 255));
 	flyThread = new std::thread(&Game::FLY, this);// init fly thread
 
+	//score stuff
+	Coin* coin1 = new Coin({15,15});
+	Coin* coin2 = new Coin({15,15});
+	coinVec.push_back(coin1);
+	coinVec.push_back(coin2);
+	coin1->setPos({450, 125});
+	coin2->setPos({800, 300});
+		      
+
 	//Bonus aBonus = Bonus();
 
 
@@ -319,6 +345,7 @@ void Game::play() { // call this function to start playing
 		if (!gameOver) {
 			checkBullets();
 			checkTanks();
+			checkCoins();
 			while (gameWindow->pollEvent(event))// listening events
 			{
 				if (event.type == Event::EventType::JoystickConnected)

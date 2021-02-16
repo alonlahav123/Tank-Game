@@ -1,5 +1,6 @@
 #include "Tank.h"
 #include "Bullet.h"
+#include "Coin.h"
 
 void Tank::setGameOver() {
 	gameOver = true;
@@ -122,7 +123,29 @@ void Tank::damaged(int damage) {
 	sdDamaged->play();
 }
 
+/*----------------]
+[ SCORE FUNCTIONS ]
+[----------------*/
+void Tank::addScore(unsigned int newPts) {
+        score += newPts;
+}
+
+sf::FloatRect Tank::getGlobalBounds() {
+  return this->getGlobalBounds();
+}
+
+bool Tank::isCollidingWithCoin(Coin* c) {
+  if (this->getGlobalBounds().intersects(c->getGlobalBounds())) {
+      return true;
+    }
+    return false;
+}
+/*-----------------]
+[ \SCORE FUNCTIONS ]
+[-----------------*/
+
 void eat() {};// eating bonus 
+
 //start moving
 void Tank::move() {
 	if (isMoving == false) {
